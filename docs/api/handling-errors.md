@@ -56,7 +56,7 @@ Unfortunately, 10 / 0 is not dividable...
 ... but 10 / 2 is!
 ```
 
-- Example of using `dynamicus::Status<T>`
+- Example of using `dynamicus::Status<T>`:
 
 ```cxx
 #include <Dynamicus.hxx>
