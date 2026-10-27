@@ -48,8 +48,8 @@ $(error "Invalid build mode: $(BUILD_MODE). Expected: release debug")
 endif
 
 # Target and directories
-BUILD_DIR 	:= .build
-OBJS_DIR 	:= .objs
+BUILD_DIR 	:= .build/$(OS)-$(ARCH)
+OBJS_DIR 	:= .objs/$(OS)-$(ARCH)
 TARGET		:= $(BUILD_DIR)/libDynamicus.a
 
 # Convert the sources to object files
@@ -69,20 +69,13 @@ else
 $(error "Invalid build mode: $(BUILD_MODE). Expected: release debug")
 endif
 
-# Target and directories
-BUILD_DIR 	:= .build
-OBJS_DIR 	:= .objs
-TARGET		:= $(BUILD_DIR)/libDynamicus.a
-
-# Convert the sources to object files
-OBJECTS		:= $(patsubst %.cxx, $(OBJS_DIR)/%.o, $(PLATFORM_DEPENDENT_SOURCES))
-
 # Recipes
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS) | $(BUILD_DIR) 
 	@echo "* AR 	$(TARGET)"
-	$(AR) rcs $(TARGET) $(OBJECTS)
+	@rm -fr $(TARGET)
+	@$(AR) rcs $(TARGET) $(OBJECTS)
 
 $(OBJS_DIR)/%.o: %.cxx | $(OBJS_DIR)
 	@echo "* CXX	$<"
