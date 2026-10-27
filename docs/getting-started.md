@@ -9,7 +9,7 @@ During construction, if the dynamic library path was specified, the class `dynam
 automatically performs operations to load a library (invoking the method `load`). During destruction, the 
 class `dynamicus::Library` also automatically frees resources (invoking the method `destroy`).
 
-Example:
+**Example**:
 
 ```cxx
 #include <Dynamicus.hxx>
@@ -74,3 +74,44 @@ int main() {
   return 0;
 }
 ```
+
+## Loading DLLs
+
+Since Dynamicus is also compatible with Windows system, it is able to load DLLs and retrieve the address 
+of DLL symbols. **Example**:
+
+```
+#include "Dynamicus.hxx"
+#include <iostream>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+typedef DWORD (*GetLastErrorFn)();
+
+int main() {
+  using namespace dynamicus;
+
+  Library lib("kernel32.dll");
+  if (lib.getCondition() == Library::Condition::FAILED) {
+    std::cout << "Failed to load kernel32.dll" << std::endl;
+    return -1;
+  }
+
+  auto getLastError = reinterpret_cast<GetLastErrorFn>(
+      *lib.getSymbolAddress("GetLastError").getValueUnsafe());
+  if (getLastError == nullptr) {
+    std::cout << "Failed to get \"GetLastError\"" << std::endl;
+    return -1;
+  }
+
+  std::cout << "getLastError() = " << getLastError() << std::endl;
+  return 0;
+}
+```
+
+**Output**:
+
+```
+getLastError() = 0
+```
+
