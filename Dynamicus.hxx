@@ -52,6 +52,15 @@ public:
   }
 };
 
+enum class OsType { WINDOWS, LINUX };
+enum class ArchType { AMD64 };
+
+// Provides the current operating system that the library was compiled for.
+OsType getOs() noexcept;
+
+// Provides the current architecture that the library was compiled for.
+ArchType getArch() noexcept;
+
 } // namespace dynamicus
 
 #endif
