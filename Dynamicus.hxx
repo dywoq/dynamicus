@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <optional>
+#include <type_traits>
 
 namespace dynamicus {
 
@@ -21,6 +22,20 @@ struct StatusCode {
   constexpr explicit StatusCode(Type value) : value(value) {}
   constexpr bool isOkay() const noexcept { return value == OK; }
   constexpr operator bool() const noexcept { return isOkay(); }
+
+  // Converts the provided enumeration to `dynamicus::StatusCode::Type` at
+  // compilation time.
+  //
+  // A compilation failure occurs if `EnumT` is not an enumeration and its
+  // underlying type is not `dynamicus::StatusCode::Type`.
+  template <typename EnumT>
+  constexpr static inline StatusCode fromEnum(EnumT val) noexcept {
+    static_assert(std::is_enum_v<EnumT>, "EnumT must be an enumeration");
+    static_assert(
+        std::is_same_v<std::underlying_type_t<EnumT>, Type>,
+        "the underlying type of EnumT must be dynamicus::StatusCode::Type");
+    return StatusCode(static_cast<Type>(val));
+  }
 };
 
 // Represents a result structure that contains a status code and value. Use it
