@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <optional>
+#include <string_view>
 #include <type_traits>
 
 namespace dynamicus {
@@ -89,6 +90,20 @@ public:
     FAILED,
   };
 
+  enum class Codes : StatusCode::Type {
+    // A symbol is not found in the loaded library. It is either undefined or
+    // unexported.
+    GETTING_SYMBOL_ADDR_FAILED = StatusCode::OK + 1,
+
+    // The library was destroyed. You can load a new library in the same class
+    // using the `load` method.
+    DESTROYED,
+
+    // The library failed to initialize. You can load it again using the `load`
+    // method.
+    FAILED_TO_INITIALIZE,
+  };
+
 private:
   struct hiddenInfo;
   std::unique_ptr<hiddenInfo> m_hiddenInfoPtr;
@@ -114,6 +129,10 @@ public:
   // `Condition::DESTROYED`. Returns if the condition is already
   // `Condition::DESTROYED`.
   void destroy() noexcept;
+
+  // Provides the address of an exported symbol from the dynamic library.
+  // See the enumeration `dynamicus::Library::Codes` for status codes.
+  Status<void *> getSymbolAddress(std::string_view symbolName) noexcept;
 };
 
 } // namespace dynamicus
