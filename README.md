@@ -7,3 +7,8 @@ addresses of exported variables and other symbols.
 # License
 
 The source code is published under Apache License 2.0. See more: https://www.apache.org/licenses/LICENSE-2.0.
+
+# Building
+
+Read the [`docs/how-to/build.md`](./docs/how-to/build.md) document.
+
