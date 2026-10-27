@@ -80,8 +80,8 @@ int main() {
 Since Dynamicus is also compatible with Windows system, it is able to load DLLs and retrieve the address 
 of DLL symbols. **Example**:
 
-```
-#include "Dynamicus.hxx"
+```cxx
+#include <Dynamicus.hxx>
 #include <iostream>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
