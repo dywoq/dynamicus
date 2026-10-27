@@ -3,7 +3,7 @@
 
 #include "Dynamicus.hxx"
 
-namespace dynamicus {
+namespace dynamicus::Metadata {
 
 std::uint16_t getMajorVersion() noexcept { return MAJOR_VERSION; }
 
