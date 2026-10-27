@@ -4,7 +4,7 @@
 OS   ?= posix
 ARCH ?= amd64
 
-MAJOR_VERSION := 0
+MAJOR_VERSION := 1
 MINOR_VERSION := 0
 
 # Dynamically choose the right compiler and linker, depending on OS and ARCH.
