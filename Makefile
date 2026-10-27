@@ -75,6 +75,10 @@ else
 $(error "Invalid build mode: $(BUILD_MODE). Expected: release debug")
 endif
 
+# Archive file
+BASE_ARCHIVE_FILE := dynamicus-$(MAJOR_VERSION).$(MINOR_VERSION)-$(BUILD_MODE)
+ZIP_ARCHIVE_FILE := $(BASE_ARCHIVE_FILE).zip
+
 # Recipes
 all: $(TARGET)
 
@@ -96,5 +100,20 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 clean:
 	@echo "* RM	$(BUILD_DIR) $(OBJS_DIR)"
-	@rm -fr $(BUILD_DIR) $(OBJS_DIR)
+	@rm -fr $(BUILD_DIR) $(OBJS_DIR) 
+
+pack_zip: $(TARGET)
+	@echo "* ZIP	$(ZIP_ARCHIVE_FILE)"
+	@rm -fr $(ZIP_ARCHIVE_FILE)
+# Temporarily create the .pack.zip directory to put the library and header file
+# into $(ZIP_ARCHIVE_FILE).
+	@mkdir .pack.zip/lib -p
+	@mkdir .pack.zip/include -p
+	@cp Dynamicus.hxx .pack.zip/include
+	@cp $(TARGET) .pack.zip/lib/
+	@cp -r README.md .pack.zip/
+	@tar -rvf $(ZIP_ARCHIVE_FILE) --transform 's|.pack.zip/include|include/|' .pack.zip/include
+	@tar -rvf $(ZIP_ARCHIVE_FILE) --transform 's|.pack.zip/lib|lib/|' .pack.zip/lib
+	@tar -rvf $(ZIP_ARCHIVE_FILE) --transform 's|.pack.zip/README.md|README.md|' .pack.zip/README.md
+	@rm .pack.zip -fr
 
