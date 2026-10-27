@@ -135,6 +135,18 @@ public:
   Status<void *> getSymbolAddress(std::string_view symbolName) noexcept;
 };
 
+namespace Metadata {
+// Provides the major version of the compiled Dynamicus library.
+std::uint16_t getMajorVersion() noexcept;
+
+// Provides the minor version of the compiled Dynamicus library.
+std::uint16_t getMinorVersion() noexcept;
+enum class BuildMode : std::uint8_t { DEBUG_MODE, RELEASE_MODE };
+
+// Gets the current build mode of the compiled Dynamicus library.
+BuildMode getBuildMode() noexcept;
+} // namespace Metadata
+
 } // namespace dynamicus
 
 #endif

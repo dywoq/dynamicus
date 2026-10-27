@@ -4,6 +4,9 @@
 OS   ?= posix
 ARCH ?= amd64
 
+MAJOR_VERSION := 0
+MINOR_VERSION := 0
+
 # Dynamically choose the right compiler and linker, depending on OS and ARCH.
 # Every OS-ARCH pair must configure the following environment variables (some 
 # are marked with "optional" tag):
@@ -54,10 +57,13 @@ TARGET		:= $(BUILD_DIR)/libDynamicus.a
 
 # Convert the sources to object files
 
-OBJECTS		:= $(patsubst %.cxx,$(OBJS_DIR)/%.o,$(PLATFORM_DEPENDENT_SOURCES))
+SOURCES		:= Metadata.cxx
+OBJECTS		:= $(patsubst %.cxx,$(OBJS_DIR)/%.o,$(PLATFORM_DEPENDENT_SOURCES) $(SOURCES))
 
 # General C++ compiler and linker flags
-GENERAL_CXX_FLAGS 	:= --std=c++17 -Wall -Werror
+GENERAL_CXX_FLAGS 	:= --std=c++17 -Wall -Werror \
+			   -DMAJOR_VERSION=$(MAJOR_VERSION) \
+			   -DMINOR_VERSION=$(MINOR_VERSION)
 
 # Configure build mode and validate it.
 BUILD_MODE ?= debug
