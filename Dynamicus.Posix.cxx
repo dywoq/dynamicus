@@ -51,4 +51,16 @@ void Library::destroy() noexcept {
   m_condition = Condition::DESTROYED;
 }
 
+Status<void *> Library::getSymbolAddress(std::string_view symbolName) noexcept {
+  if (m_condition == Condition::DESTROYED)
+    return StatusCode::fromEnum(Codes::DESTROYED);
+  if (m_condition == Condition::FAILED)
+    return StatusCode::fromEnum(Codes::FAILED_TO_INITIALIZE);
+
+  void *symbolAddress = dlsym(m_hiddenInfoPtr->handle, symbolName.data());
+  return symbolAddress
+             ? Status(symbolAddress)
+             : StatusCode::fromEnum(Codes::GETTING_SYMBOL_ADDR_FAILED);
+}
+
 } // namespace dynamicus
