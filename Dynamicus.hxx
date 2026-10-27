@@ -5,6 +5,7 @@
 #define DYNAMICUS_HXX
 
 #include <cstdint>
+#include <filesystem>
 #include <optional>
 
 namespace dynamicus {
@@ -60,6 +61,45 @@ OsType getOs() noexcept;
 
 // Provides the current architecture that the library was compiled for.
 ArchType getArch() noexcept;
+
+// Represents a dynamic library, whose constructor is automatically loading the
+// specified library and destructor is destroying the loaded library.
+class Library {
+public:
+  // Specifies the current condition of this library. You can use it to check
+  // whether the library failed to load.
+  enum Condition {
+    INITIALIZED,
+    DESTROYED,
+    FAILED,
+  };
+
+private:
+  struct hiddenInfo;
+  std::unique_ptr<hiddenInfo> m_hiddenInfoPtr;
+  Condition m_condition;
+
+public:
+  explicit Library() noexcept;
+  explicit Library(const std::filesystem::path &libraryPath) noexcept;
+  explicit Library(const char *libraryPath) noexcept;
+
+  ~Library() noexcept;
+
+  // Returns the current condition.
+  Condition getCondition() noexcept;
+
+  // Loads the specified dynamic library, completing the platform-dependent
+  // steps. Sets the condition to `Condition::FAILED` if it failed to load the
+  // library. Returns if the condition is already `Condition::INITIALIZED`.
+  void load(const std::filesystem::path &libraryPath) noexcept;
+  void load(const char *libraryPath) noexcept;
+
+  // Destroys the loaded library, making it unusable. Sets the condition to
+  // `Condition::DESTROYED`. Returns if the condition is already
+  // `Condition::DESTROYED`.
+  void destroy() noexcept;
+};
 
 } // namespace dynamicus
 
