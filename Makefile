@@ -31,10 +31,10 @@ ifeq ($(ARCH),amd64)
             	PLATFORM_DEPENDENT_CXX_FLAGS := -DOS_WINDOWS -DARCH_AMD64
             	PLATFORM_DEPENDENT_SOURCES := Dynamicus.Windows.cxx
         else
-		$(error Unsupported OS: $(OS))
+$(error Unsupported OS: $(OS))
         endif
 else
-	$(error Unsupported architecture: $(ARCH))
+$(error Unsupported architecture: $(ARCH))
 endif
 
 # General C++ compiler and linker flags
@@ -115,5 +115,6 @@ pack_zip: $(TARGET)
 	@tar -rvf $(ZIP_ARCHIVE_FILE) --transform 's|.pack.zip/include|include/|' .pack.zip/include
 	@tar -rvf $(ZIP_ARCHIVE_FILE) --transform 's|.pack.zip/lib|lib/|' .pack.zip/lib
 	@tar -rvf $(ZIP_ARCHIVE_FILE) --transform 's|.pack.zip/README.md|README.md|' .pack.zip/README.md
+	@tar -rvf $(ZIP_ARCHIVE_FILE) docs/
 	@rm .pack.zip -fr
 

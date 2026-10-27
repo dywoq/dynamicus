@@ -54,9 +54,9 @@ make clean
 
 ## `pack_zip`
 
-**Description**: Packs the library's headers, archived library and README.md file in the ZIP file. The 
-output is `dynamicus-$(MAJOR_VERSION).$(MINOR_VERSION)-$(BUILD_MODE)`. Before packing it, the recipe compiles
-and archives the library. This recipe is needed for distribution.
+**Description**: Packs the library's headers, archived library, README.md file and `docs/` folder in the ZIP 
+file. Theoutput is `dynamicus-$(MAJOR_VERSION).$(MINOR_VERSION)-$(BUILD_MODE)`. Before packing it, the recipe 
+compiles and archives the library. This recipe is needed for distribution.
 
 **Example**:
 ```
